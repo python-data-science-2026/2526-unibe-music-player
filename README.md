@@ -55,6 +55,9 @@ If you would not like to install the extra developer packages use
 uv sync --no-dev
 ```
 
-Running the project. To do. 
-
+## Running the project
+To run the project ensure you are in the src directory and then:
+```bash
+uv run main.py
+```
 

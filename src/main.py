@@ -3,9 +3,51 @@ from modules.Music import Music
 
 # TODO: remove below. Test purposes for now
 
-# music = Music("../data/believer.mp3")
+def run(filepath=None):
+    db = MusicDatabase(filepath)
 
-# db = MusicDatabase("db.pck")
-# db.add_song(music)
-# db.data[0][0].artist
-# db.save("db.pqt")
+    while True:
+        print("\nWhat would you like to do?")
+        print("1. View database")
+        print("2. Add song")
+        print("3. Quit")
+
+        choice = input("Enter choice as 1, 2, or 3: ").strip()
+
+        if choice == "1":
+            if db.data.empty:
+                print("Database is empty.")
+            else:
+                print(db.data)
+
+
+        elif choice == "2":
+            while True:
+                path = input("Enter file path (or 'done' to stop): ").strip()
+                if path.lower() == "done":
+                    break
+                try:
+                    title = input("Enter title (or press Enter to skip): ").strip() or None
+                    artist = input("Enter artist (or press Enter to skip): ").strip() or None
+                    genre = input("Enter genre (or press Enter to skip): ").strip() or None
+                    year = input("Enter year (or press Enter to skip): ").strip()
+                    year = int(year) if year else None
+                    song = Music(path, title=title, artist=artist, genre=genre, year=year)
+                    db.add_song(vars(song))
+                    print(f"Added: {song.title}")
+                except ValueError as e:
+                    print(f"Error: {e}")
+            save_path = input("Enter filepath to save database: ").strip()
+            db.save(save_path)
+
+        elif choice == "3":
+            break
+
+        else:
+            print("Invalid choice, try again.")
+
+
+if __name__ == "__main__":
+    filepath = input("Enter database filepath (or press Enter to start fresh): ").strip()
+    run(filepath if filepath else None)
+
