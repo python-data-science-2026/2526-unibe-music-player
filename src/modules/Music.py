@@ -25,23 +25,20 @@ class Music:
             return 2
 
     def load_path(self, path):
-        """Checking filetype using self.file_type().
-         Extraction of metadata from mp3 or optionally user input for wav."""
         file_type = self.file_type(path)
-        if file_type== 0:
+        if file_type == 0:
             mut = mutagen.File(path)
             self.title = mut.get("TIT2").text[0] if mut.get("TIT2") else None
             self.artist = mut.get("TPE1").text[0] if mut.get("TPE1") else None
             self.genre = mut.get("TCON").text[0] if mut.get("TCON") else None
             self.year = int(str(mut.get("TDRC").text[0])) if mut.get("TDRC") else None
-        elif  file_type== 1:
-            self.title = input("Enter title: ")
-            self.artist = input("Enter artist: ")
-            self.genre = input("Enter genre: ")
-            self.year = int(input("Enter year: "))
+        elif file_type == 1:
+            self.title = None
+            self.artist = None
+            self.genre = None
+            self.year = None
         elif file_type == 2:
             raise ValueError(f"Unsupported file type for {path}. Expected .wav or .mp3")
-
 
 
     def __init__(self, path, title=None, artist=None, genre=None, year=None):

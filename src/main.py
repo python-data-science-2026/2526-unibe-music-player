@@ -20,18 +20,23 @@ def run(filepath=None):
             else:
                 print(db.data)
 
+
         elif choice == "2":
             while True:
                 path = input("Enter file path (or 'done' to stop): ").strip()
                 if path.lower() == "done":
                     break
                 try:
-                    song = Music(path)
+                    title = input("Enter title (or press Enter to skip): ").strip() or None
+                    artist = input("Enter artist (or press Enter to skip): ").strip() or None
+                    genre = input("Enter genre (or press Enter to skip): ").strip() or None
+                    year = input("Enter year (or press Enter to skip): ").strip()
+                    year = int(year) if year else None
+                    song = Music(path, title=title, artist=artist, genre=genre, year=year)
                     db.add_song(vars(song))
                     print(f"Added: {song.title}")
                 except ValueError as e:
                     print(f"Error: {e}")
-
             save_path = input("Enter filepath to save database: ").strip()
             db.save(save_path)
 
@@ -43,6 +48,6 @@ def run(filepath=None):
 
 
 if __name__ == "__main__":
-    run("my_database.pkl")
-
+    filepath = input("Enter database filepath (or press Enter to start fresh): ").strip()
+    run(filepath if filepath else None)
 
