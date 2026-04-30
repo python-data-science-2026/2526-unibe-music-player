@@ -41,13 +41,17 @@ class Music:
             raise ValueError(f"Unsupported file type for {path}. Expected .wav or .mp3")
 
 
-    def __init__(self, path, title, artist, genre, year):
+    def __init__(self, path, title = None, artist = None, genre = None, year = None):
         self.path = path
         self.load_path(self.path)
-        self.title = title
-        self.artist = artist
-        self.genre = genre
-        self.year = year
+        if title is not None:
+            self.title = title
+        if artist is not None:
+            self.artist = artist
+        if genre is not None:
+            self.genre = genre
+        if year is not None:
+            self.year = year
 
     def __str__(self):
         return self.title
