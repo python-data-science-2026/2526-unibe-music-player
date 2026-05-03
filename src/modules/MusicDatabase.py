@@ -39,3 +39,27 @@ class MusicDatabase:
             self.data.to_pickle(filepath)
         else:
             raise Exception("No filepath")
+    
+    def search(self, query: str, field: str = "all") -> pd.DataFrame:
+        """
+        This function searches a MusicDatabase object for a certain string object. 
+        It can be specified (field) whether we want to search for a song title 
+        only, a genre only, artist only, or all of them (default). It returns matching results as a pd.DataFrame.
+        """
+        if self.data.empty:
+            print("Database is empty.")
+            return pd.DataFrame([])
+        if field not in ["title", "genre", "artist", "all"]:
+            raise ValueError("Invalid field. Expected 'title', 'genre', 'artist', or 'all'.")
+        if field == "title":
+            return self.data[self.data["title"].str.contains(query, case=False, na=False)]
+        elif field == "genre":
+            return self.data[self.data["genre"].str.contains(query, case=False, na=False)]
+        elif field == "artist":
+            return self.data[self.data["artist"].str.contains(query, case=False, na=False)]
+        else:
+            return self.data[
+                self.data["title"].str.contains(query, case=False, na=False) |
+                self.data["genre"].str.contains(query, case=False, na=False) |
+                self.data["artist"].str.contains(query, case=False, na=False)
+            ]
