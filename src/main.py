@@ -35,6 +35,8 @@ def run(filepath=None):
                     song = Music(path, title=title, artist=artist, genre=genre, year=year)
                     db.add_song(vars(song))
                     print(f"Added: {song.title}")
+                except FileNotFoundError:
+                    print(f"Error: file not found at '{path}'. Please check the path and try again.")
                 except ValueError as e:
                     print(f"Error: {e}")
             save_path = input("Enter filepath to save database: ").strip()
