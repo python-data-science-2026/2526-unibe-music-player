@@ -10,9 +10,10 @@ def run(filepath=None):
         print("\nWhat would you like to do?")
         print("1. View database")
         print("2. Add song")
-        print("3. Quit")
+        print("3. Search song")
+        print("4. Quit")
 
-        choice = input("Enter choice as 1, 2, or 3: ").strip()
+        choice = input("Enter choice as 1, 2, 3, or 4: ").strip()
 
         if choice == "1":
             if db.data.empty:
@@ -42,7 +43,21 @@ def run(filepath=None):
             save_path = input("Enter filepath to save database: ").strip()
             db.save(save_path)
 
+
         elif choice == "3":
+            query = input("Enter search query: ").strip()
+            field = input("Search by (title/genre/artist/all): ").strip().lower()
+            try:
+                results = db.search(query, field)
+                if results.empty:
+                    print("No matching songs found.")
+                else:
+                    print(results)
+            except ValueError as e:
+                print(f"Error: {e}")
+
+                
+        elif choice == "4":
             break
 
         else:
