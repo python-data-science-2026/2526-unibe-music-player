@@ -33,7 +33,7 @@ class Music:
         elif file_type == 1: #.WAV
             from mutagen.wave import WAVE
             return WAVE(self.path).info.length
-        elif file_type == 2:  # unsupported
+        else:  # unsupported
             raise ValueError(f"Unsupported file type for {path}. Expected .wav or .mp3")
 
 
@@ -47,22 +47,14 @@ class Music:
             self.artist = mut.get("TPE1").text[0] if mut.get("TPE1") else None
             self.genre = mut.get("TCON").text[0] if mut.get("TCON") else None
             self.year = int(str(mut.get("TDRC").text[0])) if mut.get("TDRC") else None
-            try:
-                self.duration = self.get_duration(file_type)
-            except Exception as e:
-                self.duration = None
-        elif file_type == 1: #.WAV
-            self.title = None
-            self.artist = None
-            self.genre = None
-            self.year = None
-            try:
-                self.duration = self.get_duration(file_type)
-            except Exception as e:
-                self.duration = None
-        elif file_type == 2:#unsupported
+
+        else:#unsupported
             raise ValueError(f"Unsupported file type for {path}. Expected .wav or .mp3")
 
+        try:
+            self.duration = self.get_duration(file_type)
+        except Exception as e:
+            self.duration = None
 
     def __init__(self, path, title = None, artist = None, genre = None, year = None, duration = None):
         self.path = path

@@ -33,7 +33,6 @@ class Player:
             pygame.mixer.music.pause()
             self.offset += time.time() - self.start_time
             self.is_playing = False
-
     def resume(self):
         """Resume from paused position."""
         if not self.is_playing:
