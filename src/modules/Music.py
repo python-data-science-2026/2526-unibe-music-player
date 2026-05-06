@@ -24,24 +24,37 @@ class Music:
         else:
             return 2
 
+    def get_duration(self,path):
+        """Method to get duration of song in seconds."""
+        file_type = self.file_type(self.path)
+        if file_type == 0: #mp#
+            from mutagen.mp3 import MP3
+            return MP3(self.path).info.length
+        elif file_type == 1: #.WAV
+            from mutagen.wave import WAVE
+            return WAVE(self.path).info.length
+        else:  # unsupported
+            raise ValueError(f"Unsupported file type for {path}. Expected .wav or .mp3")
+
+
     def load_path(self, path):
+        """Method to load file from path. Expects argument: path."""
+
         file_type = self.file_type(path)
-        if file_type == 0:
+        if file_type == 0: #mp3
             mut = mutagen.File(path)
             self.title = mut.get("TIT2").text[0] if mut.get("TIT2") else None
             self.artist = mut.get("TPE1").text[0] if mut.get("TPE1") else None
             self.genre = mut.get("TCON").text[0] if mut.get("TCON") else None
             self.year = int(str(mut.get("TDRC").text[0])) if mut.get("TDRC") else None
-        elif file_type == 1:
-            self.title = None
-            self.artist = None
-            self.genre = None
-            self.year = None
-        elif file_type == 2:
+        elif file_type == 2 :#unsupported
             raise ValueError(f"Unsupported file type for {path}. Expected .wav or .mp3")
+        try:
+            self.duration = self.get_duration(file_type)
+        except Exception as e:
+            self.duration = None
 
-
-    def __init__(self, path, title = None, artist = None, genre = None, year = None):
+    def __init__(self, path, title = None, artist = None, genre = None, year = None, duration = None):
         self.path = path
         self.load_path(self.path)
         if title is not None:
@@ -52,6 +65,9 @@ class Music:
             self.genre = genre
         if year is not None:
             self.year = year
+        if duration is not None:
+            self.duration = duration
 
     def __str__(self):
         return self.title
+

@@ -1,6 +1,6 @@
 import pandas as pd
 import os
-
+import pygame as pg
 
 class MusicDatabase:
     data = None
@@ -15,9 +15,11 @@ class MusicDatabase:
             self.data = pd.DataFrame([])
 
     def add_song(self, music):
+        """Method to add song to database. Expects argument: music object"""
         self.data = pd.concat([self.data, pd.DataFrame([music])], ignore_index=True)
 
     def remove_song_by_name(self, music: str):
+        """Method to remove song. Expects argument: song title"""
         if "Title" not in self.data.columns:
             print("Title column not found")
             return
@@ -28,6 +30,7 @@ class MusicDatabase:
         self.data = self.data.drop(music_index).reset_index(drop=True)
 
     def remove_song_by_index(self, index):
+        """Method to remove song. Expects argument: song index"""
         try:
             self.data = self.data.drop(index)
             self.data = self.data.reset_index(drop=True)
@@ -42,9 +45,9 @@ class MusicDatabase:
     
     def search(self, query: str, field: str = "all") -> pd.DataFrame:
         """
-        This function searches a MusicDatabase object for a certain string object. 
-        It can be specified (field) whether we want to search for a song title 
-        only, a genre only, artist only, or all of them (default). It returns matching results as a pd.DataFrame.
+        Method to search MusicDatabase object for a string object.
+        User input to specify (field): song title only, genre only, artist only, or all(default).
+        Returns: matching results as a pd.DataFrame.
         """
         if self.data.empty:
             print("Database is empty.")
