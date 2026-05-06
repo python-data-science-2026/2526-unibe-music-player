@@ -47,10 +47,8 @@ class Music:
             self.artist = mut.get("TPE1").text[0] if mut.get("TPE1") else None
             self.genre = mut.get("TCON").text[0] if mut.get("TCON") else None
             self.year = int(str(mut.get("TDRC").text[0])) if mut.get("TDRC") else None
-
-        else:#unsupported
+        elif file_type == 2 :#unsupported
             raise ValueError(f"Unsupported file type for {path}. Expected .wav or .mp3")
-
         try:
             self.duration = self.get_duration(file_type)
         except Exception as e:
