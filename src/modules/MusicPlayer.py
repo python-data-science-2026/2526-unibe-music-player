@@ -1,5 +1,9 @@
 import pygame
 import time
+import soundfile as sf
+import numpy as np
+import librosa
+
 
 class Player:
     def __init__(self, db):
@@ -86,3 +90,22 @@ class Player:
         if self.current_index is None:
             return None
         return self.db.data.iloc[self.current_index]
+    
+    def amplify(self, factor):
+        """Amplify a song by a given factor and continue playing from the same position."""
+        if self.current_index is None:
+            raise ValueError("No song is currently selected to amplify.")
+        current_song = self.db.data.iloc[self.current_index]["path"]
+        samples, sample_rate = sf.read(current_song)
+        amplified_samples = samples * factor
+        amplified_samples = np.clip(amplified_samples, -1.0, 1.0)
+        temp_path = "temp_amplified.wav"
+        sf.write(temp_path, amplified_samples, sample_rate)
+        if self.is_playing:
+            self.pause()  # updates self.offset correctly and stops playback
+            pygame.mixer.music.load(temp_path)
+            pygame.mixer.music.play(start=self.offset)
+            self.start_time = time.time()
+            self.is_playing = True
+        else:
+            pygame.mixer.music.load(temp_path)
