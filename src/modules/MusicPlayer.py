@@ -1,5 +1,9 @@
 import pygame
 import time
+import soundfile as sf
+import numpy as np
+import librosa
+
 
 class Player:
     def __init__(self, db):
@@ -86,3 +90,9 @@ class Player:
         if self.current_index is None:
             return None
         return self.db.data.iloc[self.current_index]
+    
+    def amplify(self, factor):
+        if self.current_index is None:
+            raise ValueError("Aucune musique n'est sélectionnée.")
+
+        pygame.mixer.music.set_volume(factor)
