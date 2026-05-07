@@ -13,7 +13,7 @@ def run(filepath=None):
         print("1. View database")
         print("2. Add song")
         print("3. Search song")
-        print("4. Play song)")
+        print("4. Play song")
         print("5. Quit")
 
         choice = input("Enter choice as 1, 2, 3, 4, or 5: ").strip()
