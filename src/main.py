@@ -59,7 +59,7 @@ def run(filepath=None):
             except ValueError as e:
                 print(f"Error: {e}")
 
-                
+
         elif choice == "4":
             if db.data.empty:
                 print("Database is empty.")
@@ -72,6 +72,23 @@ def run(filepath=None):
                         song_index = int(song_index)
                         player = Player(db)
                         player.load(song_index)
+
+                        song_skip = input("Do you want to start at a specific point in the song (format : m:s, enter to skip): ").strip().lower()
+                        offset_seconds = 0
+                        if song_skip != "" :
+                            try:
+                                minutes_str, seconds_str = song_skip.split(":")
+
+                                minutes = int(minutes_str)
+                                seconds = int(seconds_str)
+
+                                offset_seconds = (minutes * 60) + seconds
+
+                                print(f"Music will start at {minutes}m and {seconds}s (Total: {offset_seconds} seconds).")
+                            except ValueError:
+                                print("Invalid format, song will start at the beggining.")
+                                offset_seconds = 0
+                        player.seek(offset_seconds)
                         player.play()
 
                         while True:
@@ -100,7 +117,7 @@ def run(filepath=None):
                             elif action == "n":
                                 player.next_song()
                             elif action == "a":
-                                factor = float(input("Enter amplification factor (e.g., 1.5 for 50% louder): "))
+                                factor = float(input("Enter amplification factor (between 0.0 and 1.0): "))
                                 player.amplify(factor)
                             elif action == "q":
                                 player.pause()
